@@ -1,13 +1,14 @@
 ﻿@model MultasB.Models.Agentes
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Adicionar novo Agente";
 }
 
 <h2>Create</h2>
 
-
-@using (Html.BeginForm()) 
+@* especificar o formulário*@
+@using (Html.BeginForm("create",
+                       "Agentes",FormMethod.Post,new { enctype="multipart/from-data"}))
 {
     @Html.AntiForgeryToken()
     
@@ -34,8 +35,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Fotografia, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Fotografia, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Fotografia, "", new { @class = "text-danger" })
+
+                    <input type="file" name="uploadFotografia" style="color:blue" accept=".jpg" />
+                       @Html.ValidationMessageFor(model => model.Fotografia, "", new { @class = "text-danger" })
             </div>
         </div>
 
