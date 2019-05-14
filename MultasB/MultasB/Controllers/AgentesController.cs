@@ -90,26 +90,99 @@ namespace MultasB.Controllers
         }
 
         // GET: Agentes/Delete/5
+        /// <summary>
+        /// mostra na view os dados de um agente para, depois, remover o mesmo
+        /// </summary>
+        /// <param name="id"> identificador do agente a remover</param>
+        /// <returns></returns>
         public ActionResult Delete(int? id)
         {
+            // o ID do agente não foi fornecido 
+            // não é possivel procurar o agente 
+            // o que devo fazer?
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                // opção por defeito do 'template'
+                //  return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                // e não há ID do Agente, uma de duas coisas aconteceu:
+                // - há um erro nos links da aplicação
+                // - há um 'chico esperto' a fazer asneira no URL
+
+                // redireciono o utilizador para o ecrã inicial
+                return RedirectToAction("Index");
+         
             }
-            Agentes agentes = db.Agentes.Find(id);
-            if (agentes == null)
-            {
-                return HttpNotFound();
+
+            
+            // procura os dados do agente cujo o ID é fornecido
+            Agentes agente = db.Agentes.Find(id);
+
+
+            // se o agente não for encontrado 
+               if (agente == null)
+            {// ou há um erro, ou há um 'chico esperto' ....
+             // return HttpNotFound();
+
+                // redireciono o utilizador para o ecrã inicial
+                return RedirectToAction("Index");
             }
-            return View(agentes);
+            // para o caso do utilizador alterar, de forma fraudulenta os dados do Agente,vamos guardá-os internamente 
+            // para isso , vou guardar o valor  do ID do agente 
+            // - guardar o ID do agente num cookie cifrado
+            // - guardar o ID numa var. de sessão(quem estiver a usar o ASP.net Core já não tem esta ferramenta...)
+            // - outras opções...
+            Session["IdAgente"] = agente.ID;
+            Session["Metodo"] = "Agentes/Delete";
+
+
+
+
+
+
+            // envia para a view os dados do agente 
+            return View(agente);
         }
 
         // POST: Agentes/Delete/5
+        /// <summary>
+        /// concretizar a operação de remoção de um agente
+        /// </summary>
+        /// <param name="id">identificador do agente</param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int? id)
         {
+            if (id == null) {
+                // se entrei aqui é porque existe um erro
+                // não se sabe o ID do agente a remover
+                return RedirectToAction("Index");
+            }
+
+            // avaliar se o ID do agente que é fornecido é o mesmo ID do agente que foi apresentado no ecrã
+            if (id!=(int) Session["IdAgente"]) {
+                // há um ataque!
+                // redireconar para a página do Index
+                return RedirectToAction("Index");
+
+            }
+            // avaliar se o metedo é o que é esperado
+            string operacao = "Agentes/Delete";
+            if (operacao != (string)Session["Metodo"])
+            {
+                // há um ataque!
+                // redireconar para a página do Index
+                return RedirectToAction("Index");
+
+            }
+            // procura os dados do agente, na BD
             Agentes agente = db.Agentes.Find(id);
+
+            if (agente == null) {
+                // náo foi possivel encontrar o Agente 
+                return RedirectToAction("Index");
+            }
             try
             {
                 db.Agentes.Remove(agente);
