@@ -25,17 +25,24 @@ namespace MultasB.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
-            Agentes agentes = db.Agentes.Find(id);
-            if (agentes == null)
+            Agentes agente = db.Agentes.Find(id);
+            if (agente == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index");
             }
-            return View(agentes);
+            Session["Metodo"] = "";
+
+
+            return View(agente);
         }
 
         // GET: Agentes/Create
+        /// <summary>
+        /// Mostra a view para carregar os dados de um novo agente 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
             return View();
@@ -44,18 +51,47 @@ namespace MultasB.Controllers
         // POST: Agentes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Recolhe os dados da view sobre um novo agente
+        /// </summary>
+        /// <param name="agente">dados do novo agente</param>
+        /// <param name="uploadFotografia">ficheiro com a foto do novo agente</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agentes, HttpPostedFileBase uploadFotografia)
-        {
+        public ActionResult Create([Bind(Include = "Nome,Esquadra")] Agentes agente, HttpPostedFileBase uploadFotografia)
+        {  
+            /// 1º será que foi enviado um ficheiro?
+            /// 2º será que o ficheiro, se foi fornecido, é do tipo correto?
+            /// 3º qual o nome que devo dar ao ficheiro?
+            /// 4º como o associar ao novo Agente?
+            /// 5º como o guardar no disco rígido?
+
+
+
+
+
+
+            // confronta os dados que vem da view com a forma que os dados devem  ter .
+            // ie, valida os dados com o modelo
             if (ModelState.IsValid)
             {
-                db.Agentes.Add(agentes);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Agentes.Add(agente);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+
+                }
+                catch (Exception)
+                {
+
+
+                }
+              
             }
 
-            return View(agentes);
+            return View(agente);
         }
 
         // GET: Agentes/Edit/5

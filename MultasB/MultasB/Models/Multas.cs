@@ -15,10 +15,11 @@ namespace MultasB.Models
 
         public string Infracao { get; set; }
 
+        [Display(Name ="Local da Multa")]
         public string LocalDaMulta { get; set; }
-
+        [Display(Name = "Valor da Multa")]
         public decimal ValorMulta { get; set; }
-
+        [Display(Name = "Data da Multa")]
         public DateTime DataDaMulta { get; set; }
 
 
@@ -31,14 +32,14 @@ namespace MultasB.Models
         [ForeignKey("Viatura")]
         public int ViaturaFK { get; set; } // Base de dados
 
-        public Viaturas Viatura { get; set; } // C#
+        public virtual Viaturas Viatura { get; set; } // C#
 
         //  FK para Condutor
 
         [ForeignKey("Condutor")]
         public int CondutorFK { get; set; } // Base de dados
 
-        public Condutores Condutor { get; set; } // C#
+        public virtual Condutores Condutor { get; set; } // C#
 
 
         //  FK para Condutor
@@ -46,7 +47,7 @@ namespace MultasB.Models
         [ForeignKey("Agente")]
         public int AgenteFK { get; set; } // Base de dados
 
-        public Agentes Agente { get; set; } // C#
+        public virtual Agentes Agente { get; set; } // C#
 
 
 

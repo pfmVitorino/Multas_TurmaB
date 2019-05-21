@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace MultasB.Models
 
         public int ID { get; set; }
 
+        [Display(Name = "Matrícula")]
         public string Matricula { get; set; }
 
         public string Marca { get; set; }

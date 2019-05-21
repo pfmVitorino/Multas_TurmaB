@@ -8,6 +8,13 @@ namespace MultasB.Models
 {
     public class Agentes
     {
+        public Agentes() {
+
+            ListaDeMultas = new HashSet<Multas>();
+
+        }
+
+
         [Key] // identificação do atributo como primary key
         public int ID { get; set; }
 
@@ -30,6 +37,7 @@ namespace MultasB.Models
         /// lista das multas associadas ao Agente
         /// </summary>
 
-        public ICollection<Multas> ListaDeMultas { get; set; }
+        public virtual ICollection<Multas> ListaDeMultas { get; set; }
+        // este termo ´virtual´vai ativar a funcionalidade de ´lazy loading´
     }
 }
