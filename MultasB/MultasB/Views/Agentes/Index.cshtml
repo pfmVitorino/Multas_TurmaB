@@ -5,10 +5,12 @@
 }
 
 <h2>Listagem de Agentes</h2>
-
+@if (User.IsInRole("RecursosHumanos"))
+{
 <p>
     @Html.ActionLink("Novo Agente", "Create")
 </p>
+}
 <table class="table">
     <tr>
         <th>
@@ -39,10 +41,20 @@
                  width="50" />
                  @*Html.DisplayNameFor(model => model.Fotografia)*@
         </td>
+        
         <td>
-            @Html.ActionLink("Editar", "Edit", new { id=agente.ID }) |
-            @Html.ActionLink("Detalhes", "Details", new { id=agente.ID }) |
-            @Html.ActionLink("Apagar", "Delete", new { id=agente.ID })
+            @Html.ActionLink("Detalhes", "Details", new { id = agente.ID })
+
+            @if (User.IsInRole("RecursosHumanos"))
+    {
+        <text>
+            |
+            @Html.ActionLink("Editar", "Edit", new { id = agente.ID }) |
+
+            @Html.ActionLink("Apagar", "Delete", new { id = agente.ID })
+        </text>
+
+}
         </td>
     </tr>
 }

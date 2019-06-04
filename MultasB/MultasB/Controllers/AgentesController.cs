@@ -11,17 +11,21 @@ using MultasB.Models;
 
 namespace MultasB.Controllers
 {
+    [Authorize] // obriga a que os utilizdores esteja AUTENTICADOS
     public class AgentesController : Controller
     {
         private MultasDB db = new MultasDB();
 
         // GET: Agentes
+        [Authorize(Roles ="RecursosHumanos,Agentes")] // além da AUTENTICACAO, só os utilizadores do tipo Recursos humanos ou agente é que têm acesso
+
         public ActionResult Index()
         {
             return View(db.Agentes.ToList());
         }
 
         // GET: Agentes/Details/5
+       
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -44,6 +48,8 @@ namespace MultasB.Controllers
         /// Mostra a view para carregar os dados de um novo agente 
         /// </summary>
         /// <returns></returns>
+        
+        [Authorize(Roles ="RecursosHumanos")]
         public ActionResult Create()
         {
             return View();
@@ -58,6 +64,7 @@ namespace MultasB.Controllers
         /// <param name="agente">dados do novo agente</param>
         /// <param name="uploadFotografia">ficheiro com a foto do novo agente</param>
         /// <returns></returns>
+        [Authorize(Roles = "RecursosHumanos")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Nome,Esquadra")] Agentes agente, HttpPostedFileBase uploadFotografia)
@@ -145,6 +152,7 @@ namespace MultasB.Controllers
         }
 
         // GET: Agentes/Edit/5
+        [Authorize(Roles = "RecursosHumanos")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -162,6 +170,7 @@ namespace MultasB.Controllers
         // POST: Agentes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "RecursosHumanos")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agentes)
@@ -181,6 +190,7 @@ namespace MultasB.Controllers
         /// </summary>
         /// <param name="id"> identificador do agente a remover</param>
         /// <returns></returns>
+        [Authorize(Roles = "RecursosHumanos")]
         public ActionResult Delete(int? id)
         {
             // o ID do agente não foi fornecido 
@@ -236,6 +246,7 @@ namespace MultasB.Controllers
         /// </summary>
         /// <param name="id">identificador do agente</param>
         /// <returns></returns>
+        [Authorize(Roles ="RecursosHumanos")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int? id)
